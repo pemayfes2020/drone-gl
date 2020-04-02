@@ -1,10 +1,10 @@
 #pragma once
 
+#include "graphic/color.hpp"
+
 #include "graphic/impl/stl.hpp"
 
 #include <Eigen/Core>
-
-using Color = Eigen::Vector3f;
 
 namespace Shape
 {
@@ -15,8 +15,8 @@ struct ShapeBase {
 
     virtual void draw() const = 0;
     void start_draw(
-        const Eigen::Vector3f& position,
-        const Eigen::Vector3f& rotation);
+        const Eigen::Vector3d& position,
+        const Eigen::Vector3d& rotation);
     void end_draw();
 };
 
@@ -29,34 +29,34 @@ struct Teapot : public ShapeBase {
 };
 
 struct Sphere : public ShapeBase {
-    float radius;
+    double radius;
 
-    Sphere(float radius) : radius(radius) {}
+    Sphere(double radius) : radius(radius) {}
     virtual void draw() const override;
 };
 
 struct Plane : public ShapeBase {
-    float height;
-    float width;
+    double height;
+    double width;
 
-    Plane(float height, float width)
+    Plane(double height, double width)
         : height(height), width(width) {}
     virtual void draw() const override;
 };
 
 
 struct Rectangular : public ShapeBase {
-    Eigen::Vector3f size;
+    Eigen::Vector3d size;
 
-    Rectangular(const Eigen::Vector3f& size) : size(size) {}
+    Rectangular(const Eigen::Vector3d& size) : size(size) {}
     virtual void draw() const override;
 };
 
 struct Cylinder : public ShapeBase {
-    float radius;
-    float height;
+    double radius;
+    double height;
 
-    Cylinder(const float radius, const float height)
+    Cylinder(const double radius, const double height)
         : radius(radius), height(height) {}
 
     virtual void draw() const override;

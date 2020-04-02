@@ -18,7 +18,7 @@ struct ColorBinary {
     Color overall;
     std::vector<ColoredPolygon> polygons;
 
-    float parse_float(std::ifstream& file)
+    double parse_float(std::ifstream& file)
     {
         union {
             char buf[4];
@@ -28,9 +28,9 @@ struct ColorBinary {
         return data.val;
     }
 
-    Eigen::Vector3f parse_point(std::ifstream& file)
+    Eigen::Vector3d parse_point(std::ifstream& file)
     {
-        return Eigen::Vector3f{
+        return Eigen::Vector3d{
             parse_float(file),
             parse_float(file),
             parse_float(file)};

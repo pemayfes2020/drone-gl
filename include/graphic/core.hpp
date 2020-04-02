@@ -16,7 +16,7 @@ namespace Graphic
 void init(int argc, char** argv);
 void start(void (*callback)(std::vector<Object>&));
 
-void rotateCamera(const Eigen::Vector3f& rotation);
+void rotateCamera(const Eigen::Vector3d& rotation);
 
 void setWindowSize(int height, int width);
 void setBGColor(Color color);

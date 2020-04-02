@@ -12,8 +12,8 @@ namespace Graphic
 
 struct Object {
     Color color;
-    Eigen::Vector3f pos;
-    Eigen::Vector3f rot;
+    Eigen::Vector3d pos;
+    Eigen::Vector3d rot;
     std::shared_ptr<Shape::ShapeBase> shape;
 };
 

@@ -7,7 +7,7 @@ namespace Graphic
 
 using namespace Eigen;
 
-Object& addSphere(const Vector3f& position, const Vector3f& rotation, float radius, Color color)
+Object& addSphere(const Vector3d& position, const Vector3d& rotation, double radius, Color color)
 {
     objects.push_back(
         Object{color, position, rotation,
@@ -15,7 +15,7 @@ Object& addSphere(const Vector3f& position, const Vector3f& rotation, float radi
     return objects.back();
 }
 
-Object& addPlane(const Eigen::Vector3f& position, const Eigen::Vector3f& rotation, float height, float width, Color color)
+Object& addPlane(const Eigen::Vector3d& position, const Eigen::Vector3d& rotation, double height, double width, Color color)
 {
     objects.push_back(
         Object{color, position, rotation,
@@ -24,7 +24,7 @@ Object& addPlane(const Eigen::Vector3f& position, const Eigen::Vector3f& rotatio
 }
 
 
-Object& addRectangular(const Eigen::Vector3f& position, const Eigen::Vector3f& rotation, const Eigen::Vector3f& size, Color color)
+Object& addRectangular(const Eigen::Vector3d& position, const Eigen::Vector3d& rotation, const Eigen::Vector3d& size, Color color)
 {
     objects.push_back(
         Object{color, position, rotation,
@@ -32,7 +32,7 @@ Object& addRectangular(const Eigen::Vector3f& position, const Eigen::Vector3f& r
     return objects.back();
 }
 
-Object& addCylinder(const Eigen::Vector3f& position, const Eigen::Vector3f& rotation, float radius, float height, Color color)
+Object& addCylinder(const Eigen::Vector3d& position, const Eigen::Vector3d& rotation, double radius, double height, Color color)
 {
 
     objects.push_back(
@@ -41,7 +41,7 @@ Object& addCylinder(const Eigen::Vector3f& position, const Eigen::Vector3f& rota
     return objects.back();
 }
 
-Object& addTeapot(const Vector3f& position, const Vector3f& rotation, int size, Color color)
+Object& addTeapot(const Vector3d& position, const Vector3d& rotation, int size, Color color)
 {
     objects.push_back(
         Object{color, position, rotation,
@@ -49,7 +49,7 @@ Object& addTeapot(const Vector3f& position, const Vector3f& rotation, int size, 
     return objects.back();
 }
 
-Object& addSTLModel(const Vector3f& position, const Vector3f& rotation, const std::string filepath, bool colored, Color color)
+Object& addSTLModel(const Vector3d& position, const Vector3d& rotation, const std::string filepath, bool colored, Color color)
 {
     if (colored) {
         objects.push_back(

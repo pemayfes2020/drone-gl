@@ -8,17 +8,17 @@ namespace STL
 {
 
 struct Polygon {
-    Eigen::Vector3f normal;
-    Eigen::Vector3f r1;
-    Eigen::Vector3f r2;
-    Eigen::Vector3f r3;
+    Eigen::Vector3d normal;
+    Eigen::Vector3d r1;
+    Eigen::Vector3d r2;
+    Eigen::Vector3d r3;
 };
 
 struct ColoredPolygon {
-    Eigen::Vector3f normal;
-    Eigen::Vector3f r1;
-    Eigen::Vector3f r2;
-    Eigen::Vector3f r3;
+    Eigen::Vector3d normal;
+    Eigen::Vector3d r1;
+    Eigen::Vector3d r2;
+    Eigen::Vector3d r3;
     bool unique;
     Color color;
 };
