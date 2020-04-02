@@ -15,16 +15,14 @@ namespace Graphic
 
 using namespace Eigen;
 
-constexpr double PI = 3.1415926535;
-
 static void (*user_callback)(std::vector<Object>&);
 
 static int window_height = 600;
 static int window_width = 600;
 
 static double cam_dist = 4000.0;
-static double cam_theta = PI / 4.0;
-static double cam_phi = PI / 5.0;
+static double cam_theta = M_PI / 4.0;
+static double cam_phi = M_PI / 5.0;
 
 Vector3d cam;
 Vector3d cam_top;
@@ -158,8 +156,8 @@ bool left_button_down = false;
 bool right_button_down = false;
 bool h_down = false;
 Vector2d pos{0, 0};
-double theta_ratio = PI * 3.0;
-double phi_ratio = PI * 1.0;
+double theta_ratio = M_PI * 3.0;
+double phi_ratio = M_PI * 1.0;
 double dist_ratio = 1000.0;
 
 void mouse(int button, int state, int x, int y)
@@ -223,8 +221,8 @@ static void motion(int x, int y)
 void key(unsigned char key, int x, int y)
 {
     if (key == 'h') {
-        cam_theta = PI / 4.0;
-        cam_phi = PI / 5.0;
+        cam_theta = M_PI / 4.0;
+        cam_phi = M_PI / 5.0;
         updateCameraPos();
 
         glPushMatrix();
