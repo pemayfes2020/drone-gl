@@ -1,6 +1,6 @@
 #pragma once
 
-#include "color.hpp"
+#include "graphic/color.hpp"
 
 #include <Eigen/Core>
 
@@ -25,5 +25,5 @@ struct ColoredPolygon {
 
 }  // namespace STL
 
-#include "stl/binary.hpp"
-#include "stl/color.hpp"
+#include "graphic/impl/stl/binary.hpp"
+#include "graphic/impl/stl/color.hpp"

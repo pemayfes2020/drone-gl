@@ -2,39 +2,45 @@
 #pragma push
 #pragma GCC diagnostic ignored "-Wnarrowing"
 
-#include "graphic/shape.hpp"
-#include "graphic/stl.hpp"
+#include "graphic/impl/shape.hpp"
+#include "graphic/impl/stl.hpp"
 
 #include <Eigen/Core>
 #include <GL/glut.h>
 
+#include <cmath>
 #include <iostream>
 
 namespace Shape
 {
 
-constexpr float PI = 3.14159265358979f;
-
 using namespace Eigen;
 
 static float rad2deg(float rad)
 {
-    return rad / PI * 180.0;
+    return rad / M_PI * 180.0;
 }
 
 inline namespace Wrapper
 {
-static void vertex3f(const Vector3f& pos)
+static inline void vertex3f(const Vector3f& pos)
 {
     glVertex3f(pos(0), pos(1), pos(2));
 }
-static void normal3f(const Vector3f& vec)
+static inline void normal3f(const Vector3f& vec)
 {
     glNormal3f(vec(0), vec(1), vec(2));
 }
+static inline void color3f(const Color& color)
+{
+    glColor3f(color(0), color(1), color(2));
+}
+
 }  // namespace Wrapper
 
-void ShapeBase::start_draw()
+void ShapeBase::start_draw(
+    const Eigen::Vector3f& position,
+    const Eigen::Vector3f& rotation)
 {
     glPushMatrix();
 
@@ -130,12 +136,12 @@ void Rectangular::draw() const
 void Cylinder::draw() const
 {
     constexpr int division = 32;
-    float dth = 2 * PI / division;
+    float dth = 2 * M_PI / division;
     const Vector3f z_offset = {0, 0, height * 0.5};
 
     // 側面
     glBegin(GL_QUADS);
-    for (float theta = 0; theta < 2 * PI; theta += dth) {
+    for (float theta = 0; theta < 2 * M_PI; theta += dth) {
         Vector3f v0{cos(theta), sin(theta), 0};
         Vector3f v1{cos(theta + dth), sin(theta + dth), 0};
         normal3f(0.5 * (v0 + v1));
@@ -149,7 +155,7 @@ void Cylinder::draw() const
     // 底面
     for (auto& top : {1, -1}) {
         glBegin(GL_TRIANGLES);
-        for (float theta = 0; theta < 2 * PI; theta += dth) {
+        for (float theta = 0; theta < 2 * M_PI; theta += dth) {
             Vector3f v[2] = {
                 {cos(theta), sin(theta), 0},
                 {cos(theta + dth), sin(theta + dth), 0}};
@@ -176,17 +182,24 @@ void STLModel::draw() const
 
 void ColoredSTLModel::draw() const
 {
+    // Uniqueなメッシュだけ色を付けて、終わったら戻す
+    // 毎周期色をつけるよりColorSTLの思想に合う
     glBegin(GL_TRIANGLES);
     for (auto polygon : data.polygons) {
         if (polygon.unique) {
-            glColor3f(polygon.color(0), polygon.color(1), polygon.color(2));
-        } else {
-            glColor3f(data.overall(0), data.overall(1), data.overall(2));
+            // set unique color
+            color3f(polygon.color);
         }
+
         normal3f(polygon.normal);
         vertex3f(polygon.r1);
         vertex3f(polygon.r2);
         vertex3f(polygon.r3);
+
+        if (polygon.unique) {
+            // unset unique color
+            color3f(data.overall);
+        }
     }
     glEnd();
 }

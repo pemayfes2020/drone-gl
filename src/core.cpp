@@ -1,7 +1,7 @@
 #define GL_SILENCE_DEPRECATION
 
-
 #include "graphic/graphic.hpp"
+#include "graphic/impl/object_list.hpp"
 
 #include <GL/glut.h>
 
@@ -17,7 +17,6 @@ using namespace Eigen;
 
 constexpr float PI = 3.1415926535;
 
-static std::vector<Object> objects;
 static void (*user_callback)(std::vector<Object>&);
 
 static int window_height = 600;
@@ -121,7 +120,7 @@ static void display(void)
 
     for (auto& obj : objects) {
         glColor3f(obj.color(0), obj.color(1), obj.color(2));
-        obj.shape->start_draw();
+        obj.shape->start_draw(obj.pos, obj.rot);
         obj.shape->draw();
         obj.shape->end_draw();
     }
@@ -281,56 +280,6 @@ void start(void (*callback)(std::vector<Object>&))
 {
     user_callback = callback;
     glutMainLoop();
-}
-
-
-Object& addSphere(const Vector3f& position, const Vector3f& rotation, float radius, Color color)
-{
-    objects.push_back(
-        Object{color, std::make_shared<Shape::Sphere>(position, rotation, radius)});
-    return objects.back();
-}
-
-Object& addPlane(const Eigen::Vector3f& position, const Eigen::Vector3f& rotation, float height, float width, Color color)
-{
-    objects.push_back(
-        Object{color, std::make_shared<Shape::Plane>(position, rotation, height, width)});
-    return objects.back();
-}
-
-
-Object& addRectangular(const Eigen::Vector3f& position, const Eigen::Vector3f& rotation, const Eigen::Vector3f& size, Color color)
-{
-    objects.push_back(
-        Object{color, std::make_shared<Shape::Rectangular>(position, rotation, size)});
-    return objects.back();
-}
-
-Object& addCylinder(const Eigen::Vector3f& position, const Eigen::Vector3f& rotation, float radius, float height, Color color)
-{
-
-    objects.push_back(
-        Object{color, std::make_shared<Shape::Cylinder>(position, rotation, radius, height)});
-    return objects.back();
-}
-
-Object& addTeapot(const Vector3f& position, const Vector3f& rotation, int size, Color color)
-{
-    objects.push_back(
-        Object{color, std::make_shared<Shape::Teapot>(position, rotation, size)});
-    return objects.back();
-}
-
-Object& addSTLModel(const Vector3f& position, const Vector3f& rotation, const std::string filepath, bool colored, Color color)
-{
-    if (colored) {
-        objects.push_back(
-            Object{color, std::make_shared<Shape::ColoredSTLModel>(position, rotation, filepath)});
-    } else {
-        objects.push_back(
-            Object{color, std::make_shared<Shape::STLModel>(position, rotation, filepath)});
-    }
-    return objects.back();
 }
 
 }  // namespace Graphic
