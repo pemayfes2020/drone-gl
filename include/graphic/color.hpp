@@ -22,4 +22,6 @@ inline const Color white{1.0, 1.0, 1.0};
 inline const Color light_gray{0.9, 0.9, 0.9};
 inline const Color dark_gray{0.2, 0.2, 0.2};
 
+inline const Color empty{0.0, 0.0, 0.0};
+
 }  // namespace ColorPreset
