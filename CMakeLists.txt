@@ -22,7 +22,9 @@ add_library(graphic STATIC ${LIB_SOURCES})
 target_include_directories(graphic PRIVATE
     ${OpenCV_INCLUDE_DIRS}
     ${OPENGL_INCLUDE_DIR}
-    ${GLUT_INCLUDE_DIR})
+    ${GLUT_INCLUDE_DIR}
+    include_private
+    )
 
 target_include_directories(graphic PUBLIC
     ${EIGEN3_INCLUDE_DIR}

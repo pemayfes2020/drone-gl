@@ -1,60 +1,65 @@
 #include "graphic/components.hpp"
-#include "graphic/impl/object_list.hpp"
-
+#include "object_list.hpp"
 
 namespace Graphic
 {
 
 using namespace Eigen;
 
-Object& addSphere(const Vector3d& position, const Vector3d& rotation, double radius, Color color)
+ObjectId addSphere(const Vector3d& position, const Vector3d& rotation, double radius, Color color)
 {
-    return objects.emplace_back(
+    objects.emplace_back(
         Object{color, position, rotation,
             std::make_shared<Shape::Sphere>(radius)});
+    return objects.size() - 1;
 }
 
-Object& addPlane(const Eigen::Vector3d& position, const Eigen::Vector3d& rotation, double height, double width, Color color)
+ObjectId addPlane(const Eigen::Vector3d& position, const Eigen::Vector3d& rotation, double height, double width, Color color)
 {
-    return objects.emplace_back(
+    objects.emplace_back(
         Object{color, position, rotation,
             std::make_shared<Shape::Plane>(height, width)});
+    return objects.size() - 1;
 }
 
 
-Object& addRectangular(const Eigen::Vector3d& position, const Eigen::Vector3d& rotation, const Eigen::Vector3d& size, Color color)
+ObjectId addRectangular(const Eigen::Vector3d& position, const Eigen::Vector3d& rotation, const Eigen::Vector3d& size, Color color)
 {
-    return objects.emplace_back(
+    objects.emplace_back(
         Object{color, position, rotation,
             std::make_shared<Shape::Rectangular>(size)});
+    return objects.size() - 1;
 }
 
-Object& addCylinder(const Eigen::Vector3d& position, const Eigen::Vector3d& rotation, double radius, double height, Color color)
+ObjectId addCylinder(const Eigen::Vector3d& position, const Eigen::Vector3d& rotation, double radius, double height, Color color)
 {
 
-    return objects.emplace_back(
+    objects.emplace_back(
         Object{color, position, rotation,
             std::make_shared<Shape::Cylinder>(radius, height)});
+    return objects.size() - 1;
 }
 
-Object& addTeapot(const Vector3d& position, const Vector3d& rotation, int size, Color color)
+ObjectId addTeapot(const Vector3d& position, const Vector3d& rotation, int size, Color color)
 {
-    return objects.emplace_back(
+    objects.emplace_back(
         Object{color, position, rotation,
             std::make_shared<Shape::Teapot>(size)});
+    return objects.size() - 1;
 }
 
-Object& addSTLModel(const Vector3d& position, const Vector3d& rotation, const std::string filepath, bool colored, Color color)
+ObjectId addSTLModel(const Vector3d& position, const Vector3d& rotation, const std::string filepath, bool colored, Color color)
 {
     if (colored) {
-        return objects.emplace_back(
+        objects.emplace_back(
             Object{color, position, rotation,
                 std::make_shared<Shape::ColoredSTLModel>(filepath)});
     } else {
-        return objects.emplace_back(
+        objects.emplace_back(
             Object{color, position, rotation,
                 std::make_shared<Shape::STLModel>(filepath)});
     }
+    return objects.size() - 1;
 }
 
 }  // namespace Graphic

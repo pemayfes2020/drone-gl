@@ -13,12 +13,18 @@
 namespace Graphic
 {
 
+using callback_type = std::function<void(void)>;
+
 void init(int argc, char** argv);
-void start(void (*callback)(std::vector<Object>&));
+void start(callback_type callback);
 
 void rotateCamera(const Eigen::Vector3d& rotation);
 
 void setWindowSize(int height, int width);
 void setBGColor(Color color);
+
+void setPosition(ObjectId id, const Eigen::Vector3d& pos);
+void setRotation(ObjectId id, const Eigen::Vector3d& rot);
+
 
 }  // namespace Graphic

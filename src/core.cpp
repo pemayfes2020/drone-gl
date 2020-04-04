@@ -1,7 +1,7 @@
 #define GL_SILENCE_DEPRECATION
 
 #include "graphic/graphic.hpp"
-#include "graphic/impl/object_list.hpp"
+#include "object_list.hpp"
 
 #include <GL/glut.h>
 
@@ -15,8 +15,7 @@ namespace Graphic
 
 using namespace Eigen;
 
-static void (*user_callback)(std::vector<Object>&);
-
+static callback_type user_callback;
 static int window_height = 600;
 static int window_width = 600;
 
@@ -28,7 +27,6 @@ Vector3d cam;
 Vector3d cam_top;
 
 static Color bg_color{0.0, 0.0, 0.0};
-
 
 void setWindowSize(int height, int width)
 {
@@ -145,7 +143,7 @@ static void reshape(int w, int h)
 
 static void idle()
 {
-    user_callback(objects);
+    user_callback();
     glutPostRedisplay();
 }
 
@@ -274,10 +272,27 @@ void init(int argc, char** argv)
     glEnable(GL_COLOR_MATERIAL);
 }
 
-void start(void (*callback)(std::vector<Object>&))
+void start(callback_type callback)
 {
     user_callback = callback;
     glutMainLoop();
+}
+
+void setPosition(ObjectId id, const Eigen::Vector3d& pos)
+{
+    if (id >= objects.size()) {
+        std::cerr << "Invalid Object Id was specified." << std::endl;
+        return;
+    }
+    objects[id].pos = pos;
+}
+void setRotation(ObjectId id, const Eigen::Vector3d& rot)
+{
+    if (id >= objects.size()) {
+        std::cerr << "Invalid Object Id was specified." << std::endl;
+        return;
+    }
+    objects[id].rot = rot;
 }
 
 }  // namespace Graphic
