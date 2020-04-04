@@ -2,7 +2,7 @@
 
 #include <vector>
 
-void callback(std::vector<Graphic::Object>&)
+void callback()
 {
 }
 
