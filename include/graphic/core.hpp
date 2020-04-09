@@ -18,7 +18,7 @@ using callback_type = std::function<void(void)>;
 void init(int argc, char** argv);
 void start(callback_type callback);
 
-void rotateCamera(const Eigen::Vector3d& rotation);
+void setCameraTarget(const Eigen::Vector3d& target_pos);
 
 void setWindowSize(int height, int width);
 void setBGColor(Color color);

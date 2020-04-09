@@ -6,6 +6,8 @@
 #include <GL/glut.h>
 
 #include <Eigen/Core>
+#include <Eigen/Geometry>
+#include <Eigen/LU>
 
 #include <cmath>
 #include <iostream>
@@ -24,6 +26,7 @@ static double cam_theta = M_PI / 4.0;
 static double cam_phi = M_PI / 5.0;
 
 Vector3d cam;
+Vector3d cam_target{0.0, 0.0, 0.0};
 Vector3d cam_top;
 
 static Color bg_color{0.0, 0.0, 0.0};
@@ -35,6 +38,11 @@ void setWindowSize(int height, int width)
     glutReshapeWindow(width, height);
 }
 
+void setCameraTarget(const Eigen::Vector3d& target_pos)
+{
+    cam_target = target_pos;
+}
+
 void setBGColor(Color color)
 {
     bg_color = color;
@@ -42,15 +50,29 @@ void setBGColor(Color color)
 
 void updateCameraPos()
 {
-    cam = Vector3d{
-        cam_dist * std::cos(cam_theta) * std::cos(cam_phi),
-        cam_dist * std::sin(cam_theta) * std::cos(cam_phi),
-        cam_dist * std::sin(cam_phi)};
+    Vector3d cam_dir
+        = -cam_dist
+          * Vector3d{
+                std::cos(cam_theta) * std::cos(cam_phi),
+                std::sin(cam_theta) * std::cos(cam_phi),
+                std::sin(cam_phi)};
+    cam = cam_target - cam_dir;
 
-    double norm = cam.norm();
-    double s = cam(2) / (cam(2) - norm * norm);
+    double norm = cam_dir.norm();
+    double t = cam_dir(2) / (cam_dir(2) - norm * norm);
 
-    cam_top = s * cam + (1.0 - s) * Vector3d{0.0, 0.0, 1.0};
+    cam_top = t * cam_dir + (1 - t) * Vector3d{0.0, 0.0, 1.0};
+    if (cam_top(2) < 0) {
+        cam_top *= -1.0;
+    }
+}
+
+void lookat()
+{
+    gluLookAt(
+        cam(0), cam(1), cam(2),
+        cam_target(0), cam_target(1), cam_target(2),
+        cam_top(0), cam_top(1), cam_top(2));
 }
 
 void drawCoordinate(int measure, double size)
@@ -109,7 +131,8 @@ static void display(void)
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();  // 行列を初期化
-    gluLookAt(cam(0), cam(1), cam(2), 0.0, 0.0, 0.0, cam_top(0), cam_top(1), cam_top(2));
+    updateCameraPos();
+    lookat();
     glPopMatrix();
 
     drawCoordinate(20, 1000);
@@ -130,7 +153,6 @@ static void reshape(int w, int h)
     window_width = w;
     window_height = h;
 
-
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     gluPerspective(120.0, (double)window_width / window_height, 1.0, 10000.0);
@@ -138,7 +160,7 @@ static void reshape(int w, int h)
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();  // 行列を初期化
 
-    gluLookAt(cam(0), cam(1), cam(2), 0.0, 0.0, 0.0, cam_top(0), cam_top(1), cam_top(2));
+    lookat();
 }
 
 static void idle()
@@ -156,7 +178,7 @@ bool h_down = false;
 Vector2d pos{0, 0};
 double theta_ratio = M_PI * 3.0;
 double phi_ratio = M_PI * 1.0;
-double dist_ratio = 1000.0;
+double dist_ratio = 3000.0;
 
 void mouse(int button, int state, int x, int y)
 {
@@ -209,7 +231,7 @@ static void motion(int x, int y)
 
     updateCameraPos();
 
-    gluLookAt(cam(0), cam(1), cam(2), 0.0, 0.0, 0.0, cam_top(0), cam_top(1), cam_top(2));
+    lookat();
 
     glPopMatrix();
 
@@ -231,8 +253,7 @@ void key(unsigned char key, int x, int y)
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();  // 行列を初期化
 
-
-        gluLookAt(cam(0), cam(1), cam(2), 0.0, 0.0, 0.0, cam_top(0), cam_top(1), cam_top(2));
+        lookat();
 
         glPopMatrix();
 
